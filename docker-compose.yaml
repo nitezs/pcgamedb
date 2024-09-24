@@ -1,0 +1,35 @@
+services:
+  pcgamedb:
+    build: .
+    container_name: pcgamedb
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:8080:8080
+    environment:
+      - LOG_LEVEL=info
+      - SERVER_PORT=8080
+      - DATABASE_HOST=pcgamedb-mongodb
+      - DATABASE_PORT=27017
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=pcgamedb
+      - REDIS_HOST=pcgamedb-redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+      # Read more about environment variables: config/config.go
+  pcgamedb-mongodb:
+    container_name: pcgamedb-mongodb
+    image: mongo:latest
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./mongodb:/data/db
+  pcgamedb-redis:
+    image: redis:latest
+    container_name: pcgamedb-redis
+    volumes:
+      - ./redis:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped

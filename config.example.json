@@ -1,0 +1,27 @@
+{
+  "log_level": "info",
+  "server": {
+    "port": "8080",
+    "secret_key": "default"
+  },
+  "database": {
+    "host": "127.0.0.1",
+    "port": 27017,
+    "user": "root",
+    "password": "password",
+    "database": "gamedb"
+  },
+  "redis": {
+    "host": "127.0.0.1",
+    "port": 6379,
+    "db_index": 0
+  },
+  "online_fix": {
+    "user": "user",
+    "password": "password"
+  },
+  "twitch": {
+    "client_id": "client_id",
+    "client_secret": "client_secret"
+  }
+}

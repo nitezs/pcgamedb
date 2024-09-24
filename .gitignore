@@ -1,0 +1,10 @@
+.idea
+.vscode
+.VSCodeCounter
+dist
+logs
+docs
+*test.go
+deploy.sh
+config.json
+organize.json
