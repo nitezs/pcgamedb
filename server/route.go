@@ -32,6 +32,7 @@ func initRoute(app *gin.Engine) {
 	GameInfoGroup.GET("/platform/:platform_type/:platform_id", handler.GetGameInfoByPlatformIDHandler)
 	GameInfoGroup.GET("/id/:id", handler.GetGameInfoByIDHandler)
 	GameInfoGroup.PUT("/update", middleware.Auth(), handler.UpdateGameInfoHandler)
+	GameInfoGroup.DELETE("/id/:id", middleware.Auth(), handler.DeleteGameInfoHandler)
 
 	app.GET("/ranking/:type", handler.GetRankingHandler)
 	app.GET("/healthcheck", handler.HealthCheckHandler)
