@@ -8,7 +8,8 @@ RUN go mod download
 COPY . .
 RUN go install github.com/swaggo/swag/cmd/swag@latest
 RUN swag init
-RUN CGO_ENABLED=0 GOOS=linux go build -o pcgamedb .
+ARG version=dev
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w -X pcgamedb/constant.Version=${version}" -o pcgamedb .
 
 FROM alpine:latest
 WORKDIR /app
