@@ -26,6 +26,10 @@ func NewXatabCrawler(logger *zap.Logger) *XatabCrawler {
 	}
 }
 
+func (c *XatabCrawler) Name() string {
+	return "XatabCrawler"
+}
+
 func (c *XatabCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	requestURL := fmt.Sprintf("%s/page/%v", constant.XatabBaseURL, page)
 	resp, err := utils.Fetch(utils.FetchConfig{

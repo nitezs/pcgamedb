@@ -25,6 +25,10 @@ func NewSteamRIPCrawler(logger *zap.Logger) *SteamRIPCrawler {
 	}
 }
 
+func (c *SteamRIPCrawler) Name() string {
+	return "SteamRIPCrawler"
+}
+
 func (c *SteamRIPCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,
@@ -56,10 +60,19 @@ func (c *SteamRIPCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	if len(megadbRegexRes) != 0 {
 		item.Download = fmt.Sprintf("https:%s", megadbRegexRes[1])
 	}
-	gofileRegex := regexp.MustCompile(`(?i)(?:https?:)?(//gofile\.io/d/[^"]+)`)
-	gofileRegexRes := gofileRegex.FindStringSubmatch(string(resp.Data))
-	if item.Download == "" && len(gofileRegexRes) != 0 {
-		item.Download = fmt.Sprintf("https:%s", gofileRegexRes[1])
+	if item.Download == "" {
+		gofileRegex := regexp.MustCompile(`(?i)(?:https?:)?(//gofile\.io/d/[^"]+)`)
+		gofileRegexRes := gofileRegex.FindStringSubmatch(string(resp.Data))
+		if len(gofileRegexRes) != 0 {
+			item.Download = fmt.Sprintf("https:%s", gofileRegexRes[1])
+		}
+	}
+	if item.Download == "" {
+		filecryptRegex := regexp.MustCompile(`(?i)(?:https?:)?(//filecrypt\.co/Container/[^"]+)`)
+		filecryptRegexRes := filecryptRegex.FindStringSubmatch(string(resp.Data))
+		if len(filecryptRegexRes) != 0 {
+			item.Download = fmt.Sprintf("https:%s", filecryptRegexRes[1])
+		}
 	}
 	if item.Download == "" {
 		return nil, errors.New("Failed to find download link")

@@ -25,6 +25,10 @@ func NewChovkaCrawler(logger *zap.Logger) *ChovkaCrawler {
 	}
 }
 
+func (c *ChovkaCrawler) Name() string {
+	return "ChovkaCrawler"
+}
+
 func (c *ChovkaCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,

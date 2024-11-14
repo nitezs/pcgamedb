@@ -27,6 +27,10 @@ func NewDODICrawler(logger *zap.Logger) *DODICrawler {
 	}
 }
 
+func (c *DODICrawler) Name() string {
+	return "DODICrawler"
+}
+
 func (c *DODICrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	return c.crawler.Crawl(page)
 }

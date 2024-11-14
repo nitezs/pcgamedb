@@ -7,5 +7,5 @@ func GetFitgirlAllGameDownloads() ([]*model.GameDownload, error) {
 }
 
 func IsFitgirlCrawled(flag string) bool {
-	return IsGameCrawled(flag, "armgddn")
+	return IsGameCrawled(flag, "fitgirl")
 }

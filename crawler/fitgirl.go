@@ -26,6 +26,10 @@ func NewFitGirlCrawler(logger *zap.Logger) *FitGirlCrawler {
 	}
 }
 
+func (c *FitGirlCrawler) Name() string {
+	return "FitGirlCrawler"
+}
+
 func (c *FitGirlCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,

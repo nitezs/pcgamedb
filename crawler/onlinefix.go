@@ -32,6 +32,10 @@ func NewOnlineFixCrawler(logger *zap.Logger) *OnlineFixCrawler {
 	}
 }
 
+func (c *OnlineFixCrawler) Name() string {
+	return "OnlineFixCrawler"
+}
+
 func (c *OnlineFixCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	if !config.Config.OnlineFixAvaliable {
 		c.logger.Error("Need Online Fix account")

@@ -26,6 +26,10 @@ func NewGOGGamesCrawler(logger *zap.Logger) *GOGGamesCrawler {
 	}
 }
 
+func (c *GOGGamesCrawler) Name() string {
+	return "GOGGamesCrawler"
+}
+
 func (c *GOGGamesCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,

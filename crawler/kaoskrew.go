@@ -26,6 +26,10 @@ func NewKaOsKrewCrawler(logger *zap.Logger) *KaOsKrewCrawler {
 	}
 }
 
+func (c *KaOsKrewCrawler) Name() string {
+	return "KaOsKrewCrawler"
+}
+
 func (c *KaOsKrewCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	return c.crawler.Crawl(page)
 }

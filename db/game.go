@@ -80,7 +80,7 @@ func IsGameCrawled(flag string, author string) bool {
 	var game model.GameDownload
 	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&game)
 	if err != nil {
-		if errors.Is(mongo.ErrNoDocuments, err) {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return false
 		}
 		return false
@@ -97,7 +97,7 @@ func IsGameCrawledByURL(url string) bool {
 	var game model.GameDownload
 	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&game)
 	if err != nil {
-		if errors.Is(mongo.ErrNoDocuments, err) {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return false
 		}
 		return false
@@ -176,7 +176,7 @@ func GetGameDownloadByUrl(url string) (*model.GameDownload, error) {
 	filter := bson.M{"url": url}
 	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&item)
 	if err != nil {
-		if errors.Is(mongo.ErrNoDocuments, err) {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			return &model.GameDownload{}, nil
 		}
 		return nil, err
@@ -399,7 +399,7 @@ func DeduplicateGames() ([]primitive.ObjectID, error) {
 		return nil, err
 	}
 	for _, item := range qres {
-		idsToDelete := item.IDs[1:]
+		idsToDelete := item.IDs[:len(item.IDs)-1]
 		res = append(res, idsToDelete...)
 		_, err = GameDownloadCollection.DeleteMany(ctx, bson.D{{Key: "_id", Value: bson.D{{Key: "$in", Value: idsToDelete}}}})
 		if err != nil {

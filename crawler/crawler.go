@@ -7,6 +7,7 @@ import (
 )
 
 type Crawler interface {
+	Name() string
 	Crawl(int) ([]*model.GameDownload, error)
 	CrawlAll() ([]*model.GameDownload, error)
 }
