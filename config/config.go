@@ -17,10 +17,15 @@ type config struct {
 	Redis              redis     `json:"redis"`
 	OnlineFix          onlinefix `json:"online_fix"`
 	Twitch             twitch    `json:"twitch"`
+	Webhooks           webhooks  `json:"webhooks"`
 	DatabaseAvaliable  bool
 	OnlineFixAvaliable bool
 	MegaAvaliable      bool
 	RedisAvaliable     bool
+}
+
+type webhooks struct {
+	CrawlTask []string `env:"WEBHOOKS_ERROR_TASK" json:"crawl_task"`
 }
 
 type server struct {
