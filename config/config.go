@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"reflect"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -118,6 +119,11 @@ func loadEnvVariables(cfg interface{}) {
 		case reflect.Bool:
 			if value, err := strconv.ParseBool(envValue); err == nil {
 				v.Field(i).SetBool(value)
+			}
+		case reflect.Slice:
+			if field.Type.Elem().Kind() == reflect.String {
+				envValueSlice := strings.Split(envValue, ",")
+				v.Field(i).Set(reflect.ValueOf(envValueSlice))
 			}
 		}
 	}
