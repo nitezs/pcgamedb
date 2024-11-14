@@ -3,6 +3,7 @@ package middleware
 import (
 	"pcgamedb/log"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,11 @@ func Logger() gin.HandlerFunc {
 		reqURI := c.Request.RequestURI
 		statusCode := c.Writer.Status()
 		clientIP := c.ClientIP()
+
+		if strings.HasPrefix(reqURI, "/swagger/") ||
+			strings.EqualFold(reqURI, "/favicon.ico") {
+			return
+		}
 
 		log.Logger.Info(
 			"request",

@@ -26,7 +26,7 @@ type config struct {
 }
 
 type webhooks struct {
-	CrawlTask []string `env:"WEBHOOKS_ERROR_TASK" json:"crawl_task"`
+	CrawlTask []string `env:"WEBHOOKS_CRAWL_TASK" json:"crawl_task"`
 }
 
 type server struct {
