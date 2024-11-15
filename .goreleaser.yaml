@@ -1,0 +1,35 @@
+project_name: pcgamedb
+before:
+  hooks:
+    - go install github.com/swaggo/swag/cmd/swag@latest
+    - swag init
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - "386"
+    ldflags:
+      - -s -w -X github.com/nitezs/pcgamedb/constant.Version={{ .Version }}
+    flags:
+      - -trimpath
+archives:
+  - format: tar.gz
+    format_overrides:
+      - format: zip
+        goos: windows
+    wrap_in_directory: true
+    files:
+      - LICENSE
+      - README.md
+release:
+  draft: true
+upx:
+  - enabled: true
+    compress: best
