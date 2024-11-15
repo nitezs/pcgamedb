@@ -7,12 +7,14 @@ import (
 	"time"
 
 	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/constant"
 	"github.com/nitezs/pcgamedb/db"
 
 	"github.com/gin-gonic/gin"
 )
 
 type HealthCheckResponse struct {
+	Version            string `json:"version"`
 	Status             string `json:"status"`
 	Message            string `json:"message,omitempty"`
 	Date               string `json:"date"`
@@ -48,6 +50,7 @@ func HealthCheckHandler(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, HealthCheckResponse{
 		Status:             "ok",
+		Version:            constant.Version,
 		Date:               time.Now().Format("2006-01-02 15:04:05"),
 		Uptime:             time.Since(config.Runtime.ServerStartTime).String(),
 		AutoCrawl:          config.Config.Server.AutoCrawl,
