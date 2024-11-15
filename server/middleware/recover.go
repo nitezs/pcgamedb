@@ -2,7 +2,8 @@ package middleware
 
 import (
 	"net/http"
-	"pcgamedb/log"
+
+	"github.com/nitezs/pcgamedb/log"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

@@ -2,8 +2,9 @@ package middleware
 
 import (
 	"net/http"
-	"pcgamedb/config"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/config"
 
 	"github.com/gin-gonic/gin"
 )

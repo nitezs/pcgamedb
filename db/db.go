@@ -3,10 +3,11 @@ package db
 import (
 	"context"
 	"fmt"
-	"pcgamedb/config"
-	"pcgamedb/log"
 	"sync"
 	"time"
+
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/log"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"

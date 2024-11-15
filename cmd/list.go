@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"pcgamedb/db"
-	"pcgamedb/log"
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/log"
 
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"

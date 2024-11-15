@@ -2,7 +2,8 @@ package db
 
 import (
 	"context"
-	"pcgamedb/config"
+
+	"github.com/nitezs/pcgamedb/config"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"

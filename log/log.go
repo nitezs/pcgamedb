@@ -2,8 +2,9 @@ package log
 
 import (
 	"os"
-	"pcgamedb/config"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/config"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

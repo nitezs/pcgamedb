@@ -1,10 +1,11 @@
 package middleware
 
 import (
-	"pcgamedb/log"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/nitezs/pcgamedb/log"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

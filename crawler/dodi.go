@@ -1,10 +1,11 @@
 package crawler
 
 import (
-	"pcgamedb/model"
-	"pcgamedb/utils"
 	"regexp"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/model"
+	"github.com/nitezs/pcgamedb/utils"
 
 	"go.uber.org/zap"
 )

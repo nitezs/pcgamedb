@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"pcgamedb/log"
-	"pcgamedb/task"
+	"github.com/nitezs/pcgamedb/log"
+	"github.com/nitezs/pcgamedb/task"
 
 	"github.com/spf13/cobra"
 )

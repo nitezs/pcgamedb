@@ -2,12 +2,13 @@ package crawler
 
 import (
 	"errors"
-	"pcgamedb/db"
-	"pcgamedb/model"
-	"pcgamedb/utils"
 	"regexp"
 	"strings"
 	"time"
+
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/model"
+	"github.com/nitezs/pcgamedb/utils"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"

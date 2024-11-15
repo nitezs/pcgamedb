@@ -1,6 +1,6 @@
 package db
 
-import "pcgamedb/model"
+import "github.com/nitezs/pcgamedb/model"
 
 func IsARMGDDNCrawled(flag string) bool {
 	return IsGameCrawled(flag, "armgddn")

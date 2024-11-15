@@ -5,13 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"pcgamedb/cache"
-	"pcgamedb/config"
-	"pcgamedb/model"
 	"regexp"
 	"slices"
 	"strings"
 	"time"
+
+	"github.com/nitezs/pcgamedb/cache"
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/model"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"

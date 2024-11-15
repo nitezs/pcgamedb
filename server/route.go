@@ -1,13 +1,13 @@
 package server
 
 import (
-	"pcgamedb/server/handler"
-	"pcgamedb/server/middleware"
+	"github.com/nitezs/pcgamedb/server/handler"
+	"github.com/nitezs/pcgamedb/server/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	docs "pcgamedb/docs"
+	docs "github.com/nitezs/pcgamedb/docs"
 
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"

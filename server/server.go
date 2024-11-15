@@ -2,13 +2,14 @@ package server
 
 import (
 	"io"
-	"pcgamedb/cache"
-	"pcgamedb/config"
-	"pcgamedb/db"
-	"pcgamedb/log"
-	"pcgamedb/server/middleware"
-	"pcgamedb/task"
 	"time"
+
+	"github.com/nitezs/pcgamedb/cache"
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/log"
+	"github.com/nitezs/pcgamedb/server/middleware"
+	"github.com/nitezs/pcgamedb/task"
 
 	"github.com/gin-gonic/gin"
 	"github.com/robfig/cron/v3"

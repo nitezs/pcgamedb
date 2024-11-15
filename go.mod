@@ -1,4 +1,4 @@
-module pcgamedb
+module github.com/nitezs/pcgamedb
 
 go 1.21.5
 

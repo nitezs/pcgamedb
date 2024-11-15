@@ -3,11 +3,12 @@ package cmd
 import (
 	"errors"
 	"fmt"
-	"pcgamedb/crawler"
-	"pcgamedb/log"
-	"pcgamedb/utils"
 	"strconv"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/crawler"
+	"github.com/nitezs/pcgamedb/log"
+	"github.com/nitezs/pcgamedb/utils"
 
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"

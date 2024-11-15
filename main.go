@@ -1,9 +1,10 @@
 package main
 
 import (
-	"pcgamedb/cmd"
-	"pcgamedb/log"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/cmd"
+	"github.com/nitezs/pcgamedb/log"
 
 	"go.uber.org/zap"
 )

@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"pcgamedb/constant"
 	"runtime"
+
+	"github.com/nitezs/pcgamedb/constant"
 
 	"github.com/spf13/cobra"
 )

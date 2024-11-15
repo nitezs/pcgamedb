@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"io"
 	"net/url"
-	"pcgamedb/db"
-	"pcgamedb/model"
-	"pcgamedb/utils"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/model"
+	"github.com/nitezs/pcgamedb/utils"
 
 	"github.com/jlaffaye/ftp"
 	"go.uber.org/zap"

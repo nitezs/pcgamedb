@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"pcgamedb/config"
-	"pcgamedb/server"
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/server"
 
 	"github.com/spf13/cobra"
 )

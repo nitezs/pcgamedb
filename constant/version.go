@@ -1,5 +1,5 @@
 package constant
 
-const (
+var (
 	Version = "dev"
 )

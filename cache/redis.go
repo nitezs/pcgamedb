@@ -3,10 +3,11 @@ package cache
 import (
 	"context"
 	"fmt"
-	"pcgamedb/config"
-	"pcgamedb/log"
 	"sync"
 	"time"
+
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/log"
 
 	"github.com/redis/go-redis/v9"
 )

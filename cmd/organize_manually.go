@@ -3,9 +3,10 @@ package cmd
 import (
 	"encoding/json"
 	"os"
-	"pcgamedb/crawler"
-	"pcgamedb/db"
-	"pcgamedb/log"
+
+	"github.com/nitezs/pcgamedb/crawler"
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/log"
 
 	"github.com/spf13/cobra"
 	"go.mongodb.org/mongo-driver/bson/primitive"

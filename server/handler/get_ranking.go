@@ -2,8 +2,9 @@ package handler
 
 import (
 	"net/http"
-	"pcgamedb/crawler"
-	"pcgamedb/model"
+
+	"github.com/nitezs/pcgamedb/crawler"
+	"github.com/nitezs/pcgamedb/model"
 
 	"github.com/gin-gonic/gin"
 )

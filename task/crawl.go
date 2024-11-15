@@ -3,10 +3,11 @@ package task
 import (
 	"net/http"
 	"net/url"
-	"pcgamedb/config"
-	"pcgamedb/crawler"
-	"pcgamedb/model"
-	"pcgamedb/utils"
+
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/crawler"
+	"github.com/nitezs/pcgamedb/model"
+	"github.com/nitezs/pcgamedb/utils"
 
 	"go.uber.org/zap"
 )
@@ -19,13 +20,13 @@ func Crawl(logger *zap.Logger) {
 		if c, ok := item.(crawler.PagedCrawler); ok {
 			g, err := c.CrawlMulti([]int{1, 2, 3})
 			if err != nil {
-				logger.Error("Failed to crawl games", zap.String("crawler", c.Name()), zap.Error(err))
+				logger.Warn("Failed to crawl games", zap.String("crawler", c.Name()), zap.Error(err))
 			}
 			games = append(games, g...)
 		} else if c, ok := item.(crawler.SimpleCrawler); ok {
 			g, err := c.CrawlAll()
 			if err != nil {
-				logger.Error("Failed to crawl games", zap.String("crawler", c.Name()), zap.Error(err))
+				logger.Warn("Failed to crawl games", zap.String("crawler", c.Name()), zap.Error(err))
 			}
 			games = append(games, g...)
 		}

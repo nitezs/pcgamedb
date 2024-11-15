@@ -5,16 +5,17 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
-	"pcgamedb/cache"
-	"pcgamedb/config"
-	"pcgamedb/constant"
-	"pcgamedb/db"
-	"pcgamedb/model"
-	"pcgamedb/utils"
 	"regexp"
 	"runtime/debug"
 	"strconv"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/cache"
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/constant"
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/model"
+	"github.com/nitezs/pcgamedb/utils"
 )
 
 var TwitchToken string

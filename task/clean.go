@@ -1,7 +1,7 @@
 package task
 
 import (
-	"pcgamedb/db"
+	"github.com/nitezs/pcgamedb/db"
 
 	"go.uber.org/zap"
 )

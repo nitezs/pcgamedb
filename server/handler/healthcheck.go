@@ -3,10 +3,11 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"pcgamedb/config"
-	"pcgamedb/db"
 	"runtime"
 	"time"
+
+	"github.com/nitezs/pcgamedb/config"
+	"github.com/nitezs/pcgamedb/db"
 
 	"github.com/gin-gonic/gin"
 )

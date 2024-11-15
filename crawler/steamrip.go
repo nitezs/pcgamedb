@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"pcgamedb/constant"
-	"pcgamedb/db"
-	"pcgamedb/model"
-	"pcgamedb/utils"
 	"regexp"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/constant"
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/model"
+	"github.com/nitezs/pcgamedb/utils"
 
 	"github.com/PuerkitoBio/goquery"
 	"go.uber.org/zap"

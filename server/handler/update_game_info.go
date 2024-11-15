@@ -2,10 +2,11 @@ package handler
 
 import (
 	"net/http"
-	"pcgamedb/crawler"
-	"pcgamedb/db"
-	"pcgamedb/model"
 	"strings"
+
+	"github.com/nitezs/pcgamedb/crawler"
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/model"
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"

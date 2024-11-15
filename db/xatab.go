@@ -1,7 +1,7 @@
 package db
 
 import (
-	"pcgamedb/model"
+	"github.com/nitezs/pcgamedb/model"
 )
 
 func GetXatabGameDownloads() ([]*model.GameDownload, error) {

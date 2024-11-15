@@ -1,7 +1,7 @@
 package db
 
 import (
-	"pcgamedb/model"
+	"github.com/nitezs/pcgamedb/model"
 )
 
 func GetOnlineFixGameDownloads() ([]*model.GameDownload, error) {

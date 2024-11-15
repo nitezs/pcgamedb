@@ -2,8 +2,9 @@ package handler
 
 import (
 	"net/http"
-	"pcgamedb/db"
-	"pcgamedb/model"
+
+	"github.com/nitezs/pcgamedb/db"
+	"github.com/nitezs/pcgamedb/model"
 
 	"github.com/gin-gonic/gin"
 )
