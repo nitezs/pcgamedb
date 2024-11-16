@@ -45,28 +45,12 @@ func GetSteam250(url string) ([]*model.GameInfo, error) {
 	})
 	var res []*model.GameInfo
 	count := 0
-	idMap, err := GetIGDBIDBySteamIDsCache(steamIDs)
-	if err != nil {
-		return nil, err
-	}
-	for _, item := range rank {
-		if count == 10 {
-			break
-		}
-		if idMap[item.SteamID] != 0 {
-			info, err := db.GetGameInfoByPlatformID("igdb", idMap[item.SteamID])
-			if err == nil {
-				res = append(res, info)
-				count++
-				continue
-			}
-		} else {
-			info, err := db.GetGameInfoByPlatformID("steam", item.SteamID)
-			if err == nil {
-				res = append(res, info)
-				count++
-				continue
-			}
+	for _, steamID := range steamIDs {
+		info, err := db.GetGameInfoByPlatformID("steam", steamID)
+		if err == nil {
+			res = append(res, info)
+			count++
+			continue
 		}
 	}
 	return res, nil
@@ -124,7 +108,7 @@ func GetSteam250Cache(k string, f func() ([]*model.GameInfo, error)) ([]*model.G
 			if err != nil {
 				return data, nil
 			}
-			err = cache.AddWithExpire(key, dataBytes, 24*time.Hour)
+			err = cache.AddWithExpire(key, dataBytes, 12*time.Hour)
 			if err != nil {
 				return data, nil
 			}

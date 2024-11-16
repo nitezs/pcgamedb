@@ -31,7 +31,7 @@ func (c *FitGirlCrawler) Name() string {
 	return "FitGirlCrawler"
 }
 
-func (c *FitGirlCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *FitGirlCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,
 	})
@@ -61,7 +61,7 @@ func (c *FitGirlCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 		return nil, errors.New("Failed to find magnet")
 	}
 	magnet := magnetRegexRes[0]
-	item, err := db.GetGameDownloadByUrl(url)
+	item, err := db.GetGameItemByUrl(url)
 	if err != nil {
 		return nil, err
 	}
@@ -74,7 +74,7 @@ func (c *FitGirlCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	return item, nil
 }
 
-func (c *FitGirlCrawler) Crawl(page int) ([]*model.GameDownload, error) {
+func (c *FitGirlCrawler) Crawl(page int) ([]*model.GameItem, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: fmt.Sprintf(constant.FitGirlURL, page),
 	})
@@ -97,7 +97,7 @@ func (c *FitGirlCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 			updateFlags = append(updateFlags, fmt.Sprintf("%s%s", u, d))
 		}
 	})
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	for i, u := range urls {
 		if db.IsFitgirlCrawled(updateFlags[i]) {
 			continue
@@ -109,13 +109,13 @@ func (c *FitGirlCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 			continue
 		}
 		item.UpdateFlag = updateFlags[i]
-		err = db.SaveGameDownload(item)
+		err = db.SaveGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to save", zap.Error(err))
 			continue
 		}
 		res = append(res, item)
-		info, err := OrganizeGameDownload(item)
+		info, err := OrganizeGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to organize", zap.Error(err), zap.String("URL", u))
 			continue
@@ -129,8 +129,8 @@ func (c *FitGirlCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *FitGirlCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) {
-	var res []*model.GameDownload
+func (c *FitGirlCrawler) CrawlMulti(pages []int) ([]*model.GameItem, error) {
+	var res []*model.GameItem
 	for _, page := range pages {
 		items, err := c.Crawl(page)
 		if err != nil {
@@ -141,8 +141,8 @@ func (c *FitGirlCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) 
 	return res, nil
 }
 
-func (c *FitGirlCrawler) CrawlAll() ([]*model.GameDownload, error) {
-	var res []*model.GameDownload
+func (c *FitGirlCrawler) CrawlAll() ([]*model.GameItem, error) {
+	var res []*model.GameItem
 	totalPageNum, err := c.GetTotalPageNum()
 	if err != nil {
 		return nil, err

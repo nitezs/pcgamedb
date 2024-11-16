@@ -31,19 +31,19 @@ func (c *KaOsKrewCrawler) Name() string {
 	return "KaOsKrewCrawler"
 }
 
-func (c *KaOsKrewCrawler) Crawl(page int) ([]*model.GameDownload, error) {
+func (c *KaOsKrewCrawler) Crawl(page int) ([]*model.GameItem, error) {
 	return c.crawler.Crawl(page)
 }
 
-func (c *KaOsKrewCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *KaOsKrewCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	return c.crawler.CrawlByUrl(url)
 }
 
-func (c *KaOsKrewCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) {
+func (c *KaOsKrewCrawler) CrawlMulti(pages []int) ([]*model.GameItem, error) {
 	return c.crawler.CrawlMulti(pages)
 }
 
-func (c *KaOsKrewCrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *KaOsKrewCrawler) CrawlAll() ([]*model.GameItem, error) {
 	return c.crawler.CrawlAll()
 }
 

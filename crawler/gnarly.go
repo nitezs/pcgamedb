@@ -24,8 +24,8 @@ func NewGnarlyCrawler(logger *zap.Logger) *GnarlyCrawler {
 	}
 }
 
-func (c *GnarlyCrawler) Crawl(num int) ([]*model.GameDownload, error) {
-	var res []*model.GameDownload
+func (c *GnarlyCrawler) Crawl(num int) ([]*model.GameItem, error) {
+	var res []*model.GameItem
 	count := 0
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: constant.GnarlyURL,
@@ -55,7 +55,7 @@ func (c *GnarlyCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 						if db.IsGnarlyCrawled(lines[i-1]) {
 							continue
 						}
-						item, err := db.GetGameDownloadByUrl(lines[i])
+						item, err := db.GetGameItemByUrl(lines[i])
 						if err != nil {
 							continue
 						}
@@ -76,7 +76,7 @@ func (c *GnarlyCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 						item.UpdateFlag = item.RawName
 						res = append(res, item)
 						count++
-						info, err := OrganizeGameDownload(item)
+						info, err := OrganizeGameItem(item)
 						if err != nil {
 							continue
 						}
@@ -93,7 +93,7 @@ func (c *GnarlyCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *GnarlyCrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *GnarlyCrawler) CrawlAll() ([]*model.GameItem, error) {
 	return c.Crawl(-1)
 }
 

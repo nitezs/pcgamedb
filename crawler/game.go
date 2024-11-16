@@ -9,6 +9,7 @@ import (
 	"github.com/nitezs/pcgamedb/db"
 	"github.com/nitezs/pcgamedb/model"
 	"github.com/nitezs/pcgamedb/utils"
+	"go.uber.org/zap"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -25,10 +26,11 @@ func GenerateGameInfo(platform string, id int) (*model.GameInfo, error) {
 	}
 }
 
-func OrganizeGameDownload(game *model.GameDownload) (*model.GameInfo, error) {
-	item, err := OrganizeGameDownloadWithIGDB(0, game)
+func OrganizeGameItem(game *model.GameItem) (*model.GameInfo, error) {
+	item, err := OrganizeGameItemWithIGDB(0, game)
 	if err == nil {
 		if item.SteamID == 0 {
+			// get steam id from igdb
 			steamID, err := GetSteamIDByIGDBIDCache(item.IGDBID)
 			if err == nil {
 				item.SteamID = steamID
@@ -36,7 +38,7 @@ func OrganizeGameDownload(game *model.GameDownload) (*model.GameInfo, error) {
 			return item, nil
 		}
 	}
-	item, err = OrganizeGameDownloadWithSteam(0, game)
+	item, err = OrganizeGameItemWithSteam(0, game)
 	if err == nil {
 		if item.IGDBID == 0 {
 			igdbID, err := GetIGDBIDBySteamIDCache(item.SteamID)
@@ -59,7 +61,7 @@ func AddGameInfoManually(gameID primitive.ObjectID, platform string, plateformID
 	return info, db.SaveGameInfo(info)
 }
 
-func OrganizeGameDownloadManually(gameID primitive.ObjectID, platform string, platformID int) (*model.GameInfo, error) {
+func OrganizeGameItemManually(gameID primitive.ObjectID, platform string, platformID int) (*model.GameInfo, error) {
 	info, err := db.GetGameInfoByPlatformID(platform, platformID)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
@@ -105,38 +107,7 @@ func FormatName(name string) string {
 	return name
 }
 
-func TransformSteamIDToIGDBID() {
-	gameInfos, err := db.GetGameInfoWithSteamID()
-	if err != nil {
-		return
-	}
-	for _, info := range gameInfos {
-		id, err := GetIGDBIDBySteamIDCache(info.SteamID)
-		if err != nil {
-			continue
-		}
-		existedInfo, err := db.GetGameInfoByPlatformID("igdb", id)
-		if err == nil {
-			existedInfo.GameIDs = append(existedInfo.GameIDs, info.GameIDs...)
-			existedInfo.GameIDs = utils.Unique(existedInfo.GameIDs)
-			_ = db.SaveGameInfo(existedInfo)
-			_ = db.DeleteGameInfoByID(info.ID)
-		} else {
-			if err == mongo.ErrNoDocuments {
-				newInfo, err := GenerateIGDBGameInfo(id)
-				if err != nil {
-					continue
-				}
-				newInfo.ID = info.ID
-				newInfo.CreatedAt = info.CreatedAt
-				newInfo.GameIDs = info.GameIDs
-				_ = db.SaveGameInfo(newInfo)
-			}
-		}
-	}
-}
-
-func SupplementGameInfoPlatformID() error {
+func SupplementPlatformIDToGameInfo(logger *zap.Logger) error {
 	infos, err := db.GetAllGameInfos()
 	if err != nil {
 		return err
@@ -162,6 +133,7 @@ func SupplementGameInfoPlatformID() error {
 			changed = true
 		}
 		if changed {
+			logger.Info("Supplemented platform id for game info", zap.String("name", info.Name), zap.Int("igdb", int(info.IGDBID)), zap.Int("steam", int(info.SteamID)))
 			_ = db.SaveGameInfo(info)
 		}
 	}

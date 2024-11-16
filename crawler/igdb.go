@@ -311,7 +311,8 @@ func GenerateIGDBGameInfo(id int) (*model.GameInfo, error) {
 	return item, nil
 }
 
-func OrganizeGameDownloadWithIGDB(id int, game *model.GameDownload) (*model.GameInfo, error) {
+// id=0, means search id by name
+func OrganizeGameItemWithIGDB(id int, game *model.GameItem) (*model.GameInfo, error) {
 	var err error
 	if id == 0 {
 		id, err = GetIGDBIDCache(game.Name)
@@ -390,7 +391,7 @@ func GetIGDBIDBySteamIDCache(id int) (int, error) {
 	}
 }
 
-func GetIGDBIDBySteamIDs(ids []int) (map[int]int, error) {
+func GetIGDBIDsBySteamIDs(ids []int) (map[int]int, error) {
 	var err error
 	if TwitchToken == "" {
 		TwitchToken, err = LoginTwitch()
@@ -446,7 +447,7 @@ func GetIGDBIDBySteamIDs(ids []int) (map[int]int, error) {
 	return ret, nil
 }
 
-func GetIGDBIDBySteamIDsCache(ids []int) (map[int]int, error) {
+func GetIGDBIDsBySteamIDsCache(ids []int) (map[int]int, error) {
 	res := make(map[int]int)
 	notExistIDs := make([]int, 0)
 	if config.Config.RedisAvaliable {
@@ -463,7 +464,7 @@ func GetIGDBIDBySteamIDsCache(ids []int) (map[int]int, error) {
 		if len(res) == len(ids) {
 			return res, nil
 		}
-		idMap, err := GetIGDBIDBySteamIDs(notExistIDs)
+		idMap, err := GetIGDBIDsBySteamIDs(notExistIDs)
 		if err != nil {
 			return nil, err
 		}
@@ -475,6 +476,6 @@ func GetIGDBIDBySteamIDsCache(ids []int) (map[int]int, error) {
 		}
 		return res, nil
 	} else {
-		return GetIGDBIDBySteamIDs(ids)
+		return GetIGDBIDsBySteamIDs(ids)
 	}
 }

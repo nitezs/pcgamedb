@@ -4,8 +4,8 @@ import (
 	"github.com/nitezs/pcgamedb/model"
 )
 
-func GetXatabGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("xatab")
+func GetXatabGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("xatab")
 }
 
 func IsXatabCrawled(flag string) bool {

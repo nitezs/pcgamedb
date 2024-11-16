@@ -28,7 +28,7 @@ func init() {
 
 func listRun(cmd *cobra.Command, args []string) {
 	if listCmdCfg.Unid {
-		games, err := db.GetUnorganizedGameDownloads(-1)
+		games, err := db.GetUnorganizedGameItems(-1)
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 		}

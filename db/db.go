@@ -16,14 +16,14 @@ import (
 )
 
 const (
-	gameDownloadCollectionName = "game_downloads"
+	gameDownloadCollectionName = "games"
 	gameInfoCollectionName     = "game_infos"
 )
 
 var (
-	mongoDB                *mongo.Client
-	mutx                   = &sync.RWMutex{}
-	GameDownloadCollection = &CustomCollection{
+	mongoDB            *mongo.Client
+	mutx               = &sync.RWMutex{}
+	GameItemCollection = &CustomCollection{
 		collName: gameDownloadCollectionName,
 	}
 	GameInfoCollection = &CustomCollection{

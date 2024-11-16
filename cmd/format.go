@@ -33,7 +33,7 @@ func formatRun(cmd *cobra.Command, args []string) {
 	formatCmdCfg.Source = strings.ToLower(formatCmdCfg.Source)
 	switch formatCmdCfg.Source {
 	case "dodi":
-		items, err := db.GetDODIGameDownloads()
+		items, err := db.GetDODIGameItems()
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 			return
@@ -43,14 +43,14 @@ func formatRun(cmd *cobra.Command, args []string) {
 			item.Name = crawler.DODIFormatter(item.RawName)
 			if oldName != item.Name {
 				log.Logger.Info("Fix name", zap.String("old", oldName), zap.String("raw", item.RawName), zap.String("name", item.Name))
-				err := db.SaveGameDownload(item)
+				err := db.SaveGameItem(item)
 				if err != nil {
 					log.Logger.Error("Failed to update item", zap.Error(err))
 				}
 			}
 		}
 	case "kaoskrew":
-		items, err := db.GetKaOsKrewGameDownloads()
+		items, err := db.GetKaOsKrewGameItems()
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 			return
@@ -60,14 +60,14 @@ func formatRun(cmd *cobra.Command, args []string) {
 			item.Name = crawler.KaOsKrewFormatter(item.RawName)
 			if oldName != item.Name {
 				log.Logger.Info("Fix name", zap.String("old", oldName), zap.String("raw", item.RawName), zap.String("name", item.Name))
-				err := db.SaveGameDownload(item)
+				err := db.SaveGameItem(item)
 				if err != nil {
 					log.Logger.Error("Failed to update item", zap.Error(err))
 				}
 			}
 		}
 	case "freegog":
-		items, err := db.GetFreeGOGGameDownloads()
+		items, err := db.GetFreeGOGGameItems()
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 			return
@@ -77,14 +77,14 @@ func formatRun(cmd *cobra.Command, args []string) {
 			item.Name = crawler.FreeGOGFormatter(item.RawName)
 			if oldName != item.Name {
 				log.Logger.Info("Fix name", zap.String("old", oldName), zap.String("raw", item.RawName), zap.String("name", item.Name))
-				err := db.SaveGameDownload(item)
+				err := db.SaveGameItem(item)
 				if err != nil {
 					log.Logger.Error("Failed to update item", zap.Error(err))
 				}
 			}
 		}
 	case "xatab":
-		items, err := db.GetXatabGameDownloads()
+		items, err := db.GetXatabGameItems()
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 			return
@@ -94,14 +94,14 @@ func formatRun(cmd *cobra.Command, args []string) {
 			item.Name = crawler.XatabFormatter(item.RawName)
 			if oldName != item.Name {
 				log.Logger.Info("Fix name", zap.String("old", oldName), zap.String("raw", item.RawName), zap.String("name", item.Name))
-				err := db.SaveGameDownload(item)
+				err := db.SaveGameItem(item)
 				if err != nil {
 					log.Logger.Error("Failed to update item", zap.Error(err))
 				}
 			}
 		}
 	case "onlinefix":
-		items, err := db.GetOnlineFixGameDownloads()
+		items, err := db.GetOnlineFixGameItems()
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 			return
@@ -111,14 +111,14 @@ func formatRun(cmd *cobra.Command, args []string) {
 			item.Name = crawler.OnlineFixFormatter(item.RawName)
 			if oldName != item.Name {
 				log.Logger.Info("Fix name", zap.String("old", oldName), zap.String("raw", item.RawName), zap.String("name", item.Name))
-				err := db.SaveGameDownload(item)
+				err := db.SaveGameItem(item)
 				if err != nil {
 					log.Logger.Error("Failed to update item", zap.Error(err))
 				}
 			}
 		}
 	case "armgddn":
-		items, err := db.GetARMGDDNGameDownloads()
+		items, err := db.GetARMGDDNGameItems()
 		if err != nil {
 			log.Logger.Error("Failed to get games", zap.Error(err))
 			return
@@ -128,7 +128,7 @@ func formatRun(cmd *cobra.Command, args []string) {
 			item.Name = crawler.ARMGDDNFormatter(item.RawName)
 			if oldName != item.Name {
 				log.Logger.Info("Fix name", zap.String("old", oldName), zap.String("raw", item.RawName), zap.String("name", item.Name))
-				err := db.SaveGameDownload(item)
+				err := db.SaveGameItem(item)
 				if err != nil {
 					log.Logger.Error("Failed to update item", zap.Error(err))
 				}

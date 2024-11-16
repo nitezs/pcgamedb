@@ -28,12 +28,12 @@ func init() {
 }
 
 func organizeRun(cmd *cobra.Command, args []string) {
-	games, err := db.GetUnorganizedGameDownloads(organizeCmdCfg.Num)
+	games, err := db.GetUnorganizedGameItems(organizeCmdCfg.Num)
 	if err != nil {
 		log.Logger.Error("Failed to get games", zap.Error(err))
 	}
 	for _, game := range games {
-		gameInfo, err := crawler.OrganizeGameDownload(game)
+		gameInfo, err := crawler.OrganizeGameItem(game)
 		if err == nil {
 			err = db.SaveGameInfo(gameInfo)
 			if err != nil {

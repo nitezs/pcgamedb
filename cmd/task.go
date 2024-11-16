@@ -22,7 +22,7 @@ var taskCmd = &cobra.Command{
 		if taskCmdCfg.Crawl {
 			task.Crawl(log.Logger)
 			c := cron.New()
-			_, err := c.AddFunc("0 0 * * *", func() { task.Crawl(log.Logger) })
+			_, err := c.AddFunc("0 */3 * * *", func() { task.Crawl(log.Logger) })
 			if err != nil {
 				log.Logger.Error("Failed to add task", zap.Error(err))
 			}

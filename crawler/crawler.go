@@ -8,8 +8,8 @@ import (
 
 type Crawler interface {
 	Name() string
-	Crawl(int) ([]*model.GameDownload, error)
-	CrawlAll() ([]*model.GameDownload, error)
+	Crawl(int) ([]*model.GameItem, error)
+	CrawlAll() ([]*model.GameItem, error)
 }
 
 type SimpleCrawler interface {
@@ -18,7 +18,7 @@ type SimpleCrawler interface {
 
 type PagedCrawler interface {
 	Crawler
-	CrawlMulti([]int) ([]*model.GameDownload, error)
+	CrawlMulti([]int) ([]*model.GameItem, error)
 	GetTotalPageNum() (int, error)
 }
 

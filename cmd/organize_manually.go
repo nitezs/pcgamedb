@@ -58,7 +58,7 @@ func addRun(cmd *cobra.Command, args []string) {
 			log.Logger.Error("Failed to parse game id", zap.Error(err))
 			continue
 		}
-		info, err := crawler.OrganizeGameDownloadManually(objID, v.Platform, v.PlatformID)
+		info, err := crawler.OrganizeGameItemManually(objID, v.Platform, v.PlatformID)
 		if err != nil {
 			log.Logger.Error("Failed to add game info", zap.Error(err))
 			continue

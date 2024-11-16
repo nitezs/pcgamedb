@@ -75,9 +75,9 @@ func (c *ARMGDDNCrawler) fetchAndParseFTPData(filePath string) ([]GameData, erro
 	return data, nil
 }
 
-func (c *ARMGDDNCrawler) crawlGames(data []GameData, platform string, num int) ([]*model.GameDownload, error) {
+func (c *ARMGDDNCrawler) crawlGames(data []GameData, platform string, num int) ([]*model.GameItem, error) {
 	count := 0
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	modTimeMap := make(map[string]time.Time)
 	entries, err := c.conn.List(fmt.Sprintf("/%s", platform))
 	if err != nil {
@@ -116,7 +116,7 @@ func (c *ARMGDDNCrawler) crawlGames(data []GameData, platform string, num int) (
 				size += fileSize
 			}
 		}
-		item, err := db.GetGameDownloadByUrl(u)
+		item, err := db.GetGameItemByUrl(u)
 		if err != nil {
 			continue
 		}
@@ -127,7 +127,7 @@ func (c *ARMGDDNCrawler) crawlGames(data []GameData, platform string, num int) (
 		item.RawName = v.FolderName
 		item.Author = "ARMGDDN"
 		item.Download = fmt.Sprintf("ftpes://%s:%s@%s/%s/%s", ftpUsername, ftpPassword, ftpAddress, platform, url.QueryEscape(v.FolderName))
-		if err := db.SaveGameDownload(item); err != nil {
+		if err := db.SaveGameItem(item); err != nil {
 			continue
 		}
 		res = append(res, item)
@@ -140,12 +140,12 @@ func (c *ARMGDDNCrawler) crawlGames(data []GameData, platform string, num int) (
 				c.logger.Warn("strconv error", zap.Error(err))
 				continue
 			}
-			info, err = OrganizeGameDownloadWithSteam(id, item)
+			info, err = OrganizeGameItemWithSteam(id, item)
 			if err != nil {
 				continue
 			}
 		} else {
-			info, err = OrganizeGameDownload(item)
+			info, err = OrganizeGameItem(item)
 			if err != nil {
 				continue
 			}
@@ -168,15 +168,15 @@ func ARMGDDNFormatter(name string) string {
 	return strings.TrimSpace(cleanedName[:matchIndex[0]])
 }
 
-func (c *ARMGDDNCrawler) CrawlPC(num int) ([]*model.GameDownload, error) {
+func (c *ARMGDDNCrawler) CrawlPC(num int) ([]*model.GameItem, error) {
 	return c.crawlPlatform("/PC/currentserverPC-FTP.json", "PC", num)
 }
 
-func (c *ARMGDDNCrawler) CrawlPCVR(num int) ([]*model.GameDownload, error) {
+func (c *ARMGDDNCrawler) CrawlPCVR(num int) ([]*model.GameItem, error) {
 	return c.crawlPlatform("/PCVR/currentserverPCVR-FTP.json", "PCVR", num)
 }
 
-func (c *ARMGDDNCrawler) Crawl(num int) ([]*model.GameDownload, error) {
+func (c *ARMGDDNCrawler) Crawl(num int) ([]*model.GameItem, error) {
 	num1 := num / 2
 	num2 := num - num1
 	if num == -1 {
@@ -194,11 +194,11 @@ func (c *ARMGDDNCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 	return append(res1, res2...), nil
 }
 
-func (c *ARMGDDNCrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *ARMGDDNCrawler) CrawlAll() ([]*model.GameItem, error) {
 	return c.Crawl(-1)
 }
 
-func (c *ARMGDDNCrawler) crawlPlatform(jsonFile, platform string, num int) ([]*model.GameDownload, error) {
+func (c *ARMGDDNCrawler) crawlPlatform(jsonFile, platform string, num int) ([]*model.GameItem, error) {
 	err := c.connectFTP()
 	if err != nil {
 		return nil, err

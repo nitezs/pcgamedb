@@ -20,12 +20,12 @@ type GameInfo struct {
 	Languages   []string             `json:"languages" bson:"languages"`
 	Screenshots []string             `json:"screenshots" bson:"screenshots"`
 	GameIDs     []primitive.ObjectID `json:"game_ids" bson:"games"`
-	Games       []*GameDownload      `json:"game_downloads" bson:"-"`
+	Games       []*GameItem          `json:"game_downloads" bson:"-"`
 	CreatedAt   time.Time            `json:"created_at" bson:"created_at"`
 	UpdatedAt   time.Time            `json:"updated_at" bson:"updated_at"`
 }
 
-type GameDownload struct {
+type GameItem struct {
 	ID         primitive.ObjectID `json:"id" bson:"_id"`
 	Name       string             `json:"speculative_name" bson:"name"`
 	RawName    string             `json:"raw_name,omitempty" bson:"raw_name"`

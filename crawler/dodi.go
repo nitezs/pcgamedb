@@ -32,19 +32,19 @@ func (c *DODICrawler) Name() string {
 	return "DODICrawler"
 }
 
-func (c *DODICrawler) Crawl(page int) ([]*model.GameDownload, error) {
+func (c *DODICrawler) Crawl(page int) ([]*model.GameItem, error) {
 	return c.crawler.Crawl(page)
 }
 
-func (c *DODICrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *DODICrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	return c.crawler.CrawlByUrl(url)
 }
 
-func (c *DODICrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) {
+func (c *DODICrawler) CrawlMulti(pages []int) ([]*model.GameItem, error) {
 	return c.crawler.CrawlMulti(pages)
 }
 
-func (c *DODICrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *DODICrawler) CrawlAll() ([]*model.GameItem, error) {
 	return c.crawler.CrawlAll()
 }
 

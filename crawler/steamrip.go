@@ -30,7 +30,7 @@ func (c *SteamRIPCrawler) Name() string {
 	return "SteamRIPCrawler"
 }
 
-func (c *SteamRIPCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *SteamRIPCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,
 	})
@@ -41,7 +41,7 @@ func (c *SteamRIPCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	if err != nil {
 		return nil, err
 	}
-	item, err := db.GetGameDownloadByUrl(url)
+	item, err := db.GetGameItemByUrl(url)
 	if err != nil {
 		return nil, err
 	}
@@ -82,7 +82,7 @@ func (c *SteamRIPCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	return item, nil
 }
 
-func (c *SteamRIPCrawler) Crawl(num int) ([]*model.GameDownload, error) {
+func (c *SteamRIPCrawler) Crawl(num int) ([]*model.GameItem, error) {
 	count := 0
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: constant.SteamRIPGameListURL,
@@ -94,7 +94,7 @@ func (c *SteamRIPCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 	if err != nil {
 		return nil, err
 	}
-	var items []*model.GameDownload
+	var items []*model.GameItem
 	urls := []string{}
 	updateFlags := []string{} // title
 	doc.Find(".az-list-item>a").Each(func(i int, s *goquery.Selection) {
@@ -119,13 +119,13 @@ func (c *SteamRIPCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 			continue
 		}
 		item.UpdateFlag = updateFlags[i]
-		if err := db.SaveGameDownload(item); err != nil {
+		if err := db.SaveGameItem(item); err != nil {
 			c.logger.Error("Failed to save item", zap.Error(err))
 			continue
 		}
 		items = append(items, item)
 		count++
-		info, err := OrganizeGameDownload(item)
+		info, err := OrganizeGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to organize", zap.Error(err), zap.String("URL", u))
 			continue
@@ -139,7 +139,7 @@ func (c *SteamRIPCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 	return items, nil
 }
 
-func (c *SteamRIPCrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *SteamRIPCrawler) CrawlAll() ([]*model.GameItem, error) {
 	return c.Crawl(-1)
 }
 

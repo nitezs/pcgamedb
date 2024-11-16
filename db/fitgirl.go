@@ -2,8 +2,8 @@ package db
 
 import "github.com/nitezs/pcgamedb/model"
 
-func GetFitgirlAllGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("fitgirl")
+func GetFitgirlAllGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("fitgirl")
 }
 
 func IsFitgirlCrawled(flag string) bool {

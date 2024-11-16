@@ -37,7 +37,7 @@ func (c *OnlineFixCrawler) Name() string {
 	return "OnlineFixCrawler"
 }
 
-func (c *OnlineFixCrawler) Crawl(page int) ([]*model.GameDownload, error) {
+func (c *OnlineFixCrawler) Crawl(page int) ([]*model.GameItem, error) {
 	if !config.Config.OnlineFixAvaliable {
 		c.logger.Error("Need Online Fix account")
 		return nil, errors.New("Online Fix is not available")
@@ -77,7 +77,7 @@ func (c *OnlineFixCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 		)
 	})
 
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	for i, u := range urls {
 		if db.IsOnlineFixCrawled(updateFlags[i]) {
 			continue
@@ -89,13 +89,13 @@ func (c *OnlineFixCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 			continue
 		}
 		item.UpdateFlag = updateFlags[i]
-		err = db.SaveGameDownload(item)
+		err = db.SaveGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to save", zap.Error(err))
 			continue
 		}
 		res = append(res, item)
-		info, err := OrganizeGameDownload(item)
+		info, err := OrganizeGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to organize", zap.Error(err), zap.String("URL", u))
 			continue
@@ -109,7 +109,7 @@ func (c *OnlineFixCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *OnlineFixCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *OnlineFixCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	if len(c.cookies) == 0 {
 		err := c.login()
 		if err != nil {
@@ -137,7 +137,7 @@ func (c *OnlineFixCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	if len(downloadRegexRes) == 0 {
 		return nil, errors.New("Failed to find download button")
 	}
-	item, err := db.GetGameDownloadByUrl(url)
+	item, err := db.GetGameItemByUrl(url)
 	if err != nil {
 		return nil, err
 	}
@@ -215,8 +215,8 @@ func (c *OnlineFixCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	return item, nil
 }
 
-func (c *OnlineFixCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) {
-	var res []*model.GameDownload
+func (c *OnlineFixCrawler) CrawlMulti(pages []int) ([]*model.GameItem, error) {
+	var res []*model.GameItem
 	for _, page := range pages {
 		items, err := c.Crawl(page)
 		if err != nil {
@@ -227,8 +227,8 @@ func (c *OnlineFixCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error
 	return res, nil
 }
 
-func (c *OnlineFixCrawler) CrawlAll() ([]*model.GameDownload, error) {
-	var res []*model.GameDownload
+func (c *OnlineFixCrawler) CrawlAll() ([]*model.GameItem, error) {
+	var res []*model.GameItem
 	totalPageNum, err := c.GetTotalPageNum()
 	if err != nil {
 		return nil, err

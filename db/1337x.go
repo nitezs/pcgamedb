@@ -4,10 +4,10 @@ import (
 	"github.com/nitezs/pcgamedb/model"
 )
 
-func GetDODIGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("dodi")
+func GetDODIGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("dodi")
 }
 
-func GetKaOsKrewGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("kaoskrew")
+func GetKaOsKrewGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("kaoskrew")
 }

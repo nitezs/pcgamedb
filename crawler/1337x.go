@@ -33,7 +33,7 @@ func New1337xCrawler(source string, formatter Formatter, logger *zap.Logger) *s1
 	}
 }
 
-func (c *s1337xCrawler) Crawl(page int) ([]*model.GameDownload, error) {
+func (c *s1337xCrawler) Crawl(page int) ([]*model.GameItem, error) {
 	var resp *utils.FetchResponse
 	var doc *goquery.Document
 	var err error
@@ -57,7 +57,7 @@ func (c *s1337xCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 			urls = append(urls, url)
 		}
 	})
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	for _, u := range urls {
 		u = fmt.Sprintf("%s%s", constant.C1337xBaseURL, u)
 		if db.IsGameCrawledByURL(u) {
@@ -69,13 +69,13 @@ func (c *s1337xCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 			c.logger.Warn("Failed to crawl", zap.Error(err), zap.String("URL", u))
 			continue
 		}
-		err = db.SaveGameDownload(item)
+		err = db.SaveGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to save", zap.Error(err), zap.String("URL", u))
 			continue
 		}
 		res = append(res, item)
-		info, err := OrganizeGameDownload(item)
+		info, err := OrganizeGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to organize", zap.Error(err), zap.String("URL", u))
 			continue
@@ -89,14 +89,14 @@ func (c *s1337xCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *s1337xCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *s1337xCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,
 	})
 	if err != nil {
 		return nil, err
 	}
-	var item = &model.GameDownload{}
+	var item = &model.GameItem{}
 	item.Url = url
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(resp.Data))
 	if err != nil {
@@ -119,8 +119,8 @@ func (c *s1337xCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	return item, nil
 }
 
-func (c *s1337xCrawler) CrawlMulti(pages []int) (res []*model.GameDownload, err error) {
-	var items []*model.GameDownload
+func (c *s1337xCrawler) CrawlMulti(pages []int) (res []*model.GameItem, err error) {
+	var items []*model.GameItem
 	totalPageNum, err := c.GetTotalPageNum()
 	if err != nil {
 		return nil, err
@@ -138,12 +138,12 @@ func (c *s1337xCrawler) CrawlMulti(pages []int) (res []*model.GameDownload, err 
 	return res, nil
 }
 
-func (c *s1337xCrawler) CrawlAll() (res []*model.GameDownload, err error) {
+func (c *s1337xCrawler) CrawlAll() (res []*model.GameItem, err error) {
 	totalPageNum, err := c.GetTotalPageNum()
 	if err != nil {
 		return nil, err
 	}
-	var items []*model.GameDownload
+	var items []*model.GameItem
 	for i := 1; i <= totalPageNum; i++ {
 		items, err = c.Crawl(i)
 		res = append(res, items...)

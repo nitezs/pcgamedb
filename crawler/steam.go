@@ -176,7 +176,7 @@ func GenerateSteamGameInfo(id int) (*model.GameInfo, error) {
 	return item, nil
 }
 
-func OrganizeGameDownloadWithSteam(id int, game *model.GameDownload) (*model.GameInfo, error) {
+func OrganizeGameItemWithSteam(id int, game *model.GameItem) (*model.GameInfo, error) {
 	var err error
 	if id == 0 {
 		id, err = GetSteamIDCache(game.Name)

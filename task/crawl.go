@@ -13,7 +13,7 @@ import (
 )
 
 func Crawl(logger *zap.Logger) {
-	var games []*model.GameDownload
+	var games []*model.GameItem
 	var crawlerMap = crawler.BuildCrawlerMap(logger)
 	for _, item := range crawlerMap {
 		logger.Info("Crawling", zap.String("crawler", item.Name()))

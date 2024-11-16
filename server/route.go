@@ -19,13 +19,13 @@ func initRoute(app *gin.Engine) {
 	}))
 
 	GameInfoGroup := app.Group("/game")
-	GameDownloadGroup := GameInfoGroup.Group("/raw")
+	GameItemGroup := GameInfoGroup.Group("/raw")
 
-	GameDownloadGroup.GET("/unorganized", handler.GetUnorganizedGameDownloadsHandler)
-	GameDownloadGroup.POST("/organize", middleware.Auth(), handler.OrganizeGameDownloadHandler)
-	GameDownloadGroup.GET("/id/:id", handler.GetGameDownloadByIDHanlder)
-	GameDownloadGroup.GET("/name/:name", handler.GetGameDownloadByRawNameHandler)
-	GameDownloadGroup.GET("/author/:author", handler.GetGameDownloadsByAuthorHandler)
+	GameItemGroup.GET("/unorganized", handler.GetUnorganizedGameItemsHandler)
+	GameItemGroup.POST("/organize", middleware.Auth(), handler.OrganizeGameItemHandler)
+	GameItemGroup.GET("/id/:id", handler.GetGameItemByIDHanlder)
+	GameItemGroup.GET("/name/:name", handler.GetGameItemByRawNameHandler)
+	GameItemGroup.GET("/author/:author", handler.GetGameItemsByAuthorHandler)
 
 	GameInfoGroup.GET("/search", handler.SearchGamesHandler)
 	GameInfoGroup.GET("/name/:name", handler.GetGameInfosByNameHandler)

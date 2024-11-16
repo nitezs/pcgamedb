@@ -31,7 +31,7 @@ func (c *XatabCrawler) Name() string {
 	return "XatabCrawler"
 }
 
-func (c *XatabCrawler) Crawl(page int) ([]*model.GameDownload, error) {
+func (c *XatabCrawler) Crawl(page int) ([]*model.GameItem, error) {
 	requestURL := fmt.Sprintf("%s/page/%v", constant.XatabBaseURL, page)
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: requestURL,
@@ -55,7 +55,7 @@ func (c *XatabCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 		urls = append(urls, u)
 		updateFlags = append(updateFlags, s.Find(".entry__title.h2 a").Text())
 	})
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	for i, u := range urls {
 		if db.IsXatabCrawled(updateFlags[i]) {
 			continue
@@ -66,13 +66,13 @@ func (c *XatabCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 			c.logger.Warn("Failed to crawl", zap.Error(err), zap.String("URL", u))
 			continue
 		}
-		err = db.SaveGameDownload(item)
+		err = db.SaveGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to save", zap.Error(err))
 			continue
 		}
 		res = append(res, item)
-		info, err := OrganizeGameDownload(item)
+		info, err := OrganizeGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to organize", zap.Error(err), zap.String("URL", u))
 			continue
@@ -86,7 +86,7 @@ func (c *XatabCrawler) Crawl(page int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *XatabCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *XatabCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,
 	})
@@ -97,7 +97,7 @@ func (c *XatabCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	if err != nil {
 		return nil, err
 	}
-	item, err := db.GetGameDownloadByUrl(url)
+	item, err := db.GetGameItemByUrl(url)
 	if err != nil {
 		return nil, err
 	}
@@ -126,12 +126,12 @@ func (c *XatabCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	return item, nil
 }
 
-func (c *XatabCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) {
+func (c *XatabCrawler) CrawlMulti(pages []int) ([]*model.GameItem, error) {
 	totalPageNum, err := c.GetTotalPageNum()
 	if err != nil {
 		return nil, err
 	}
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	for _, page := range pages {
 		if page > totalPageNum {
 			continue
@@ -145,12 +145,12 @@ func (c *XatabCrawler) CrawlMulti(pages []int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *XatabCrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *XatabCrawler) CrawlAll() ([]*model.GameItem, error) {
 	totalPageNum, err := c.GetTotalPageNum()
 	if err != nil {
 		return nil, err
 	}
-	var res []*model.GameDownload
+	var res []*model.GameItem
 	for i := 1; i <= totalPageNum; i++ {
 		items, err := c.Crawl(i)
 		if err != nil {

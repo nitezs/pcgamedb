@@ -33,7 +33,7 @@ type GetGameInfoByIDResponse struct {
 // @Failure 500 {object} GetGameInfoByIDResponse
 // @Router /game/id/{id} [get]
 func GetGameInfoByIDHandler(c *gin.Context) {
-	var req GetGameDownloadByIDRequest
+	var req GetGameItemByIDRequest
 	if err := c.ShouldBindUri(&req); err != nil {
 		c.JSON(http.StatusBadRequest, GetGameInfoByIDResponse{
 			Status:  "error",
@@ -64,7 +64,7 @@ func GetGameInfoByIDHandler(c *gin.Context) {
 		})
 		return
 	}
-	gameInfo.Games, err = db.GetGameDownloadsByIDs(gameInfo.GameIDs)
+	gameInfo.Games, err = db.GetGameItemsByIDs(gameInfo.GameIDs)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, GetGameInfoByIDResponse{
 			Status:  "error",

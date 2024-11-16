@@ -4,8 +4,8 @@ import (
 	"github.com/nitezs/pcgamedb/model"
 )
 
-func GetFreeGOGGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("freegog")
+func GetFreeGOGGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("freegog")
 }
 func IsFreeGOGCrawled(flag string) bool {
 	return IsGameCrawled(flag, "freegog")

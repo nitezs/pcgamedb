@@ -21,7 +21,7 @@ type HealthCheckResponse struct {
 	Uptime             string `json:"uptime"`
 	Alloc              string `json:"alloc"`
 	AutoCrawl          bool   `json:"auto_crawl"`
-	GameDownload       int64  `json:"game_download,omitempty"`
+	GameItem           int64  `json:"game_download,omitempty"`
 	GameInfo           int64  `json:"game_info,omitempty"`
 	Unorganized        int64  `json:"unorganized,omitempty"`
 	RedisAvaliable     bool   `json:"redis_avaliable"`
@@ -41,9 +41,9 @@ type HealthCheckResponse struct {
 func HealthCheckHandler(c *gin.Context) {
 	var m runtime.MemStats
 	runtime.ReadMemStats(&m)
-	downloadCount, _ := db.GetGameDownloadCount()
+	downloadCount, _ := db.GetGameItemCount()
 	infoCount, _ := db.GetGameInfoCount()
-	unorganized, err := db.GetUnorganizedGameDownloads(-1)
+	unorganized, err := db.GetUnorganizedGameItems(-1)
 	unorganizedCount := int64(0)
 	if err == nil {
 		unorganizedCount = int64(len(unorganized))
@@ -55,7 +55,7 @@ func HealthCheckHandler(c *gin.Context) {
 		Uptime:             time.Since(config.Runtime.ServerStartTime).String(),
 		AutoCrawl:          config.Config.Server.AutoCrawl,
 		Alloc:              fmt.Sprintf("%.2f MB", float64(m.Alloc)/1024.0/1024.0),
-		GameDownload:       downloadCount,
+		GameItem:           downloadCount,
 		GameInfo:           infoCount,
 		Unorganized:        unorganizedCount,
 		RedisAvaliable:     config.Config.RedisAvaliable,

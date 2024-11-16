@@ -4,8 +4,8 @@ import (
 	"github.com/nitezs/pcgamedb/model"
 )
 
-func GetOnlineFixGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("onlinefix")
+func GetOnlineFixGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("onlinefix")
 }
 
 func IsOnlineFixCrawled(flag string) bool {

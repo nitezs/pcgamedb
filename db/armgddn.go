@@ -6,6 +6,6 @@ func IsARMGDDNCrawled(flag string) bool {
 	return IsGameCrawled(flag, "armgddn")
 }
 
-func GetARMGDDNGameDownloads() ([]*model.GameDownload, error) {
-	return GetGameDownloadsByAuthor("armgddn")
+func GetARMGDDNGameItems() ([]*model.GameItem, error) {
+	return GetGameItemsByAuthor("armgddn")
 }

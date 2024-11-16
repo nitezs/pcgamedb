@@ -25,12 +25,12 @@ var (
 	removeRepeatingSpacesRegex = regexp.MustCompile(`\s+`)
 )
 
-func GetGameDownloadsByAuthor(regex string) ([]*model.GameDownload, error) {
-	var res []*model.GameDownload
+func GetGameItemsByAuthor(regex string) ([]*model.GameItem, error) {
+	var res []*model.GameItem
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	filter := bson.D{{Key: "author", Value: primitive.Regex{Pattern: regex, Options: "i"}}}
-	cursor, err := GameDownloadCollection.Find(ctx, filter)
+	cursor, err := GameItemCollection.Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
@@ -44,20 +44,20 @@ func GetGameDownloadsByAuthor(regex string) ([]*model.GameDownload, error) {
 	return res, err
 }
 
-func GetGameDownloadsByAuthorPagination(regex string, page int, pageSize int) ([]*model.GameDownload, int, error) {
-	var res []*model.GameDownload
+func GetGameItemsByAuthorPagination(regex string, page int, pageSize int) ([]*model.GameItem, int, error) {
+	var res []*model.GameItem
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	filter := bson.D{{Key: "author", Value: primitive.Regex{Pattern: regex, Options: "i"}}}
 	opts := options.Find()
 	opts.SetSkip(int64((page - 1) * pageSize))
 	opts.SetLimit(int64(pageSize))
-	totalCount, err := GameDownloadCollection.CountDocuments(ctx, filter)
+	totalCount, err := GameItemCollection.CountDocuments(ctx, filter)
 	if err != nil {
 		return nil, 0, err
 	}
 	totalPage := (totalCount + int64(pageSize) - 1) / int64(pageSize)
-	cursor, err := GameDownloadCollection.Find(ctx, filter, opts)
+	cursor, err := GameItemCollection.Find(ctx, filter, opts)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -78,8 +78,8 @@ func IsGameCrawled(flag string, author string) bool {
 		{Key: "author", Value: primitive.Regex{Pattern: author, Options: "i"}},
 		{Key: "update_flag", Value: flag},
 	}
-	var game model.GameDownload
-	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&game)
+	var game model.GameItem
+	err := GameItemCollection.FindOne(ctx, filter).Decode(&game)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return false
@@ -95,8 +95,8 @@ func IsGameCrawledByURL(url string) bool {
 	filter := bson.D{
 		{Key: "url", Value: url},
 	}
-	var game model.GameDownload
-	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&game)
+	var game model.GameItem
+	err := GameItemCollection.FindOne(ctx, filter).Decode(&game)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			return false
@@ -106,7 +106,7 @@ func IsGameCrawledByURL(url string) bool {
 	return true
 }
 
-func SaveGameDownload(item *model.GameDownload) error {
+func SaveGameItem(item *model.GameItem) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	if item.ID.IsZero() {
@@ -121,7 +121,7 @@ func SaveGameDownload(item *model.GameDownload) error {
 	filter := bson.M{"_id": item.ID}
 	update := bson.M{"$set": item}
 	opts := options.Update().SetUpsert(true)
-	_, err := GameDownloadCollection.UpdateOne(ctx, filter, update, opts)
+	_, err := GameItemCollection.UpdateOne(ctx, filter, update, opts)
 	if err != nil {
 		return err
 	}
@@ -148,17 +148,17 @@ func SaveGameInfo(item *model.GameInfo) error {
 	return nil
 }
 
-func GetAllGameDownloads() ([]*model.GameDownload, error) {
-	var items []*model.GameDownload
+func GetAllGameItems() ([]*model.GameItem, error) {
+	var items []*model.GameItem
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	cursor, err := GameDownloadCollection.Find(ctx, bson.D{})
+	cursor, err := GameItemCollection.Find(ctx, bson.D{})
 	if err != nil {
 		return nil, err
 	}
 	defer cursor.Close(ctx)
 	for cursor.Next(ctx) {
-		var game model.GameDownload
+		var game model.GameItem
 		if err = cursor.Decode(&game); err != nil {
 			return nil, err
 		}
@@ -170,44 +170,44 @@ func GetAllGameDownloads() ([]*model.GameDownload, error) {
 	return items, err
 }
 
-func GetGameDownloadByUrl(url string) (*model.GameDownload, error) {
-	var item model.GameDownload
+func GetGameItemByUrl(url string) (*model.GameItem, error) {
+	var item model.GameItem
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	filter := bson.M{"url": url}
-	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&item)
+	err := GameItemCollection.FindOne(ctx, filter).Decode(&item)
 	if err != nil {
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			return &model.GameDownload{}, nil
+			return &model.GameItem{}, nil
 		}
 		return nil, err
 	}
 	return &item, nil
 }
 
-func GetGameDownloadByID(id primitive.ObjectID) (*model.GameDownload, error) {
-	var item model.GameDownload
+func GetGameItemByID(id primitive.ObjectID) (*model.GameItem, error) {
+	var item model.GameItem
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	filter := bson.M{"_id": id}
-	err := GameDownloadCollection.FindOne(ctx, filter).Decode(&item)
+	err := GameItemCollection.FindOne(ctx, filter).Decode(&item)
 	if err != nil {
 		return nil, err
 	}
 	return &item, nil
 }
 
-func GetGameDownloadsByIDs(ids []primitive.ObjectID) ([]*model.GameDownload, error) {
-	var items []*model.GameDownload
+func GetGameItemsByIDs(ids []primitive.ObjectID) ([]*model.GameItem, error) {
+	var items []*model.GameItem
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	cursor, err := GameDownloadCollection.Find(ctx, bson.M{"_id": bson.M{"$in": ids}})
+	cursor, err := GameItemCollection.Find(ctx, bson.M{"_id": bson.M{"$in": ids}})
 	if err != nil {
 		return nil, err
 	}
 	defer cursor.Close(ctx)
 	for cursor.Next(ctx) {
-		var game model.GameDownload
+		var game model.GameItem
 		if err = cursor.Decode(&game); err != nil {
 			return nil, err
 		}
@@ -250,7 +250,7 @@ func SearchGameInfos(name string, page int, pageSize int) ([]*model.GameInfo, in
 		if err = cursor.Decode(&game); err != nil {
 			return nil, 0, err
 		}
-		game.Games, err = GetGameDownloadsByIDs(game.GameIDs)
+		game.Games, err = GetGameItemsByIDs(game.GameIDs)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -287,7 +287,7 @@ func SearchGameInfosCache(name string, page int, pageSize int) ([]*model.GameInf
 			if err != nil {
 				return nil, 0, err
 			}
-			_ = cache.AddWithExpire(key, string(dataBytes), 12*time.Hour)
+			_ = cache.AddWithExpire(key, string(dataBytes), 5*time.Minute)
 			return data, totalPage, nil
 		}
 	} else {
@@ -315,10 +315,10 @@ func GetGameInfoByPlatformID(platform string, id int) (*model.GameInfo, error) {
 	return &game, nil
 }
 
-func GetUnorganizedGameDownloads(num int) ([]*model.GameDownload, error) {
+func GetUnorganizedGameItems(num int) ([]*model.GameItem, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	var gamesNotInDetails []*model.GameDownload
+	var gamesNotInDetails []*model.GameItem
 	pipeline := mongo.Pipeline{
 		bson.D{{Key: "$lookup", Value: bson.D{
 			{Key: "from", Value: "game_infos"},
@@ -337,14 +337,14 @@ func GetUnorganizedGameDownloads(num int) ([]*model.GameDownload, error) {
 		bson.D{{Key: "$sort", Value: bson.D{{Key: "name", Value: 1}}}},
 	)
 
-	cursor, err := GameDownloadCollection.Aggregate(ctx, pipeline)
+	cursor, err := GameItemCollection.Aggregate(ctx, pipeline)
 	if err != nil {
 		return nil, err
 	}
 	defer cursor.Close(ctx)
 
 	for cursor.Next(ctx) {
-		var game model.GameDownload
+		var game model.GameItem
 		if err := cursor.Decode(&game); err != nil {
 			return nil, err
 		}
@@ -392,7 +392,7 @@ func DeduplicateGames() ([]primitive.ObjectID, error) {
 			{Key: "total", Value: bson.D{{Key: "$gt", Value: 1}}},
 		}}},
 	}
-	cursor, err := GameDownloadCollection.Aggregate(ctx, pipeline)
+	cursor, err := GameItemCollection.Aggregate(ctx, pipeline)
 	if err != nil {
 		return nil, err
 	}
@@ -402,7 +402,7 @@ func DeduplicateGames() ([]primitive.ObjectID, error) {
 	for _, item := range qres {
 		idsToDelete := item.IDs[:len(item.IDs)-1]
 		res = append(res, idsToDelete...)
-		_, err = GameDownloadCollection.DeleteMany(ctx, bson.D{{Key: "_id", Value: bson.D{{Key: "$in", Value: idsToDelete}}}})
+		_, err = GameItemCollection.DeleteMany(ctx, bson.D{{Key: "_id", Value: bson.D{{Key: "$in", Value: idsToDelete}}}})
 		if err != nil {
 			return nil, err
 		}
@@ -522,17 +522,17 @@ func GetGameInfosByName(name string) ([]*model.GameInfo, error) {
 	return games, nil
 }
 
-func GetGameDownloadByRawName(name string) ([]*model.GameDownload, error) {
+func GetGameItemByRawName(name string) ([]*model.GameItem, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	name = strings.TrimSpace(name)
 	name = fmt.Sprintf("^%s$", name)
 	filter := bson.M{"raw_name": bson.M{"$regex": primitive.Regex{Pattern: name, Options: "i"}}}
-	cursor, err := GameDownloadCollection.Find(ctx, filter)
+	cursor, err := GameItemCollection.Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	var game []*model.GameDownload
+	var game []*model.GameItem
 	if err = cursor.All(ctx, &game); err != nil {
 		return nil, err
 	}
@@ -622,10 +622,10 @@ func GetGameInfoCount() (int64, error) {
 	return count, nil
 }
 
-func GetGameDownloadCount() (int64, error) {
+func GetGameItemCount() (int64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	count, err := GameDownloadCollection.CountDocuments(ctx, bson.M{})
+	count, err := GameItemCollection.CountDocuments(ctx, bson.M{})
 	if err != nil {
 		return 0, err
 	}
@@ -661,10 +661,10 @@ func DeleteGameInfoByID(id primitive.ObjectID) error {
 	return nil
 }
 
-func DeleteGameDownloadByID(id primitive.ObjectID) error {
+func DeleteGameItemByID(id primitive.ObjectID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	_, err := GameDownloadCollection.DeleteOne(ctx, bson.M{"_id": id})
+	_, err := GameItemCollection.DeleteOne(ctx, bson.M{"_id": id})
 	if err != nil {
 		return err
 	}
@@ -702,7 +702,7 @@ func GetAllAuthors() ([]string, error) {
 		}}},
 	}
 
-	cursor, err := GameDownloadCollection.Aggregate(ctx, pipeline)
+	cursor, err := GameItemCollection.Aggregate(ctx, pipeline)
 	if err != nil {
 		return nil, err
 	}

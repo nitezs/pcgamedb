@@ -27,7 +27,7 @@ func NewFreeGOGCrawler(logger *zap.Logger) *FreeGOGCrawler {
 	}
 }
 
-func (c *FreeGOGCrawler) Crawl(num int) ([]*model.GameDownload, error) {
+func (c *FreeGOGCrawler) Crawl(num int) ([]*model.GameItem, error) {
 	count := 0
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: constant.FreeGOGListURL,
@@ -49,7 +49,7 @@ func (c *FreeGOGCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 		updateFlags = append(updateFlags, s.Text()+s.AttrOr("href", ""))
 	})
 
-	res := []*model.GameDownload{}
+	res := []*model.GameItem{}
 	for i, u := range urls {
 		if count == num {
 			break
@@ -64,14 +64,14 @@ func (c *FreeGOGCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 			continue
 		}
 		item.UpdateFlag = updateFlags[i]
-		err = db.SaveGameDownload(item)
+		err = db.SaveGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to save", zap.Error(err))
 			continue
 		}
 		res = append(res, item)
 		count++
-		info, err := OrganizeGameDownload(item)
+		info, err := OrganizeGameItem(item)
 		if err != nil {
 			c.logger.Warn("Failed to organize", zap.Error(err), zap.String("URL", u))
 			continue
@@ -85,14 +85,14 @@ func (c *FreeGOGCrawler) Crawl(num int) ([]*model.GameDownload, error) {
 	return res, nil
 }
 
-func (c *FreeGOGCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
+func (c *FreeGOGCrawler) CrawlByUrl(url string) (*model.GameItem, error) {
 	resp, err := utils.Fetch(utils.FetchConfig{
 		Url: url,
 	})
 	if err != nil {
 		return nil, err
 	}
-	item, err := db.GetGameDownloadByUrl(url)
+	item, err := db.GetGameItemByUrl(url)
 	if err != nil {
 		return nil, err
 	}
@@ -127,7 +127,7 @@ func (c *FreeGOGCrawler) CrawlByUrl(url string) (*model.GameDownload, error) {
 	return item, nil
 }
 
-func (c *FreeGOGCrawler) CrawlAll() ([]*model.GameDownload, error) {
+func (c *FreeGOGCrawler) CrawlAll() ([]*model.GameItem, error) {
 	return c.Crawl(-1)
 }
 
